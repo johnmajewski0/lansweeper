@@ -1,0 +1,372 @@
+/**
+* jQuery Validation Plugin 1.9.0 ADDON
+*
+* TOM 25/04/2012   
+*
+*/
+
+(function () {
+
+    function stripHtml(value) {
+        // remove html tags and space chars
+        return value.replace(/<.[^<>]*?>/g, ' ').replace(/&nbsp;|&#160;/gi, ' ')
+        // remove numbers and punctuation
+		.replace(/[0-9.(),;:!?%#$'"_+=\/-]*/g, '');
+    }
+    jQuery.validator.addMethod("maxWords", function (value, element, params) {
+        return this.optional(element) || stripHtml(value).match(/\b\w+\b/g).length < params;
+    }, jQuery.validator.format("Please enter {0} words or less."));
+
+    jQuery.validator.addMethod("minWords", function (value, element, params) {
+        return this.optional(element) || stripHtml(value).match(/\b\w+\b/g).length >= params;
+    }, jQuery.validator.format("Please enter at least {0} words."));
+
+    jQuery.validator.addMethod("rangeWords", function (value, element, params) {
+        return this.optional(element) || stripHtml(value).match(/\b\w+\b/g).length >= params[0] && value.match(/bw+b/g).length < params[1];
+    }, jQuery.validator.format("Please enter between {0} and {1} words."));
+
+})();
+
+jQuery.validator.addMethod("itemwaittime", function (value, element) {
+    return this.optional(element) || /^([0-9]|[1-9][0-9]|[1-9][0-9][0-9])$/i.test(value);
+}, "Please enter value between 0 and 999");
+jQuery.validator.addClassRules("itemwaittime", { itemwaittime: true });
+
+jQuery.validator.addMethod("max8", function (value, element) {
+    if (value > 65)
+    {
+        return false;
+    } else {
+        return true;
+    }
+}, "Limited to 65 threads in SQLcompact version");
+jQuery.validator.addClassRules("max8", { max8: true });
+
+jQuery.validator.addMethod("max10", function (value, element) {
+    if (value > 10) {
+        return false;
+    } else {
+        return true;
+    }
+}, "Limited to 10 threads in SQLcompact version");
+jQuery.validator.addClassRules("max10", { max10: true });
+
+jQuery.validator.addMethod("customdate",
+    function (value, element) {
+        return ( /^(0?[1-9]|[12][0-9]|3[01])[\/](0?[1-9]|1[012])[\/]\d{4}$/i.test(value) // dd/mm/yy
+            || /^(0?[1-9]|1[012])[\/](0?[1-9]|[12][0-9]|3[01])[\/]\d{4}$/i.test(value) // mm/dd/yy
+            || /^\d{4}[-](0?[1-9]|1[012])[-](0?[1-9]|[12][0-9]|3[01])$/i.test(value) //yy-mm-dd
+        ); 
+    },
+    " Please fill in a valid date.");
+jQuery.validator.addClassRules("customdate", { customdate: true });
+
+
+jQuery.validator.addMethod("max99", function (value, element) {
+    var max = 0;
+    $(".max99").each(function (key, value) {
+        max += parseInt(this.value);
+    });
+    if (max > 99) return false;
+
+
+    return true;
+}, " Limited to 99 total threads in MSSQL version");
+jQuery.validator.addClassRules("max99", { max99: true });
+
+jQuery.validator.addMethod("max50", function (value, element) {
+    var max = 0;
+    $(".max50").each(function (key, value) {
+        max += parseInt(this.value);
+    });
+    if (max > 50) return false;
+
+
+    return true;
+}, " Limited to 50 total threads in MSSQL version");
+jQuery.validator.addClassRules("max50", { max50: true });
+
+jQuery.validator.addMethod("max1000", function (value, element, params) {
+    return parseInt(value) < 1001;
+}, jQuery.validator.format("Please enter a value of 1000 or less."));
+jQuery.validator.addClassRules("max1000", { max1000: true });
+
+jQuery.validator.addMethod("max65535", function (value, element, params) {
+    return parseInt(value) <= 65535;
+}, jQuery.validator.format("Please enter a value of 65535 or less."));
+jQuery.validator.addClassRules("max65535", { max65535: true });
+
+jQuery.validator.addMethod("min1", function (value, element, params) {
+    return parseInt(value) > 0;
+}, jQuery.validator.format(" Please enter a value of 1 or more."));
+jQuery.validator.addClassRules("min1", { min1: true });
+
+jQuery.validator.addMethod("min100", function (value, element, params) {
+    return parseInt(value) > 99;
+}, jQuery.validator.format("Please enter a value of 100 or more."));
+jQuery.validator.addClassRules("min100", { min100: true });
+
+jQuery.validator.addMethod("usernamecheck", function (value, element) {
+    return this.optional(element) || /^[^/:;,+=\*\?/"<>\|\[\]]+$/i.test(value);
+}, "/ : ; , * ? \" < > | [ ] + are not allowed");
+jQuery.validator.addClassRules("usernamecheck", { usernamecheck: true });
+
+jQuery.validator.addMethod("nospecialsigns", function (value, element) {
+    return this.optional(element) || /^[^<>]+$/i.test(value);
+}, "'<' and '>' are not allowed.");
+jQuery.validator.addClassRules("nospecialsigns", { nospecialsigns: true });
+
+jQuery.validator.addMethod("alphanumeric", function (value, element) {
+    return this.optional(element) || /^\w+$/i.test(value);
+}, "Letters, numbers, spaces or underscores only please");
+jQuery.validator.addClassRules("alphanumeric", { alphanumeric: true });
+
+jQuery.validator.addMethod("lettersonly", function (value, element) {
+    return this.optional(element) || /^[a-z]+$/i.test(value);
+}, "Letters only please");
+jQuery.validator.addClassRules("lettersonly", { lettersonly: true });
+
+jQuery.validator.addMethod("filename", function (value, element) {
+    return this.optional(element) || /^[^\\/:\*\?/"<>\|]+$/i.test(value);
+}, "\\ / : * ? \" < > | are not allowed in the filename");
+jQuery.validator.addClassRules("filename", { filename: true });
+
+jQuery.validator.addMethod("nowhitespace", function (value, element) {
+    return this.optional(element) || /^\S+$/i.test(value);
+}, "No white space please");
+jQuery.validator.addClassRules("nowhitespace", { nowhitespace: true });
+
+jQuery.validator.addMethod("integer", function (value, element) {
+    return this.optional(element) || /^-?\d+$/.test(value);
+}, " A positive or negative non-decimal number please");
+jQuery.validator.addClassRules("integer", { integer: true });
+
+jQuery.validator.addMethod("tempCurrency", function (value, element) {
+    return this.optional(element) || /^[\d\.\,\’\`\‘\'  ]*$/.test(value); // includes both regular (ascii 32) and non breaking space (ascii 160 - alt+0160)
+}, " Please enter a valid currency");
+jQuery.validator.addClassRules("tempCurrency", { tempCurrency: true });
+
+jQuery.validator.addMethod("time", function (value, element) {
+    return this.optional(element) || /^((0?[1-9]|1[012])(:[0-5]\d){0,2}(\ [AP]M))$|^([01]?[0-9]|2[0-3])(:[0-5]\d){0,2}$/.test(value);
+    //return true;
+}, " Please enter a valid time between 00:00 and 23:59.");
+jQuery.validator.addClassRules("time", { time: true });
+
+jQuery.validator.addMethod("ipv4", function (value, element, param) {
+    return this.optional(element) || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/i.test(value);
+}, " Please enter a valid IPv4 address.");
+jQuery.validator.addClassRules("ipv4", { ipv4: true });
+
+jQuery.validator.addMethod("ipv4orrange", function (value, element, param) {
+    return this.optional(element) || 
+            /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/i.test(value) ||
+            /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))$/i.test(value);
+}, " Please enter a valid IPv4 address or range.");
+jQuery.validator.addClassRules("ipv4orrange", { ipv4orrange: true });
+
+jQuery.validator.addMethod("ipv6", function (value, element, param) {
+    return this.optional(element) || /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/i.test(value);
+}, " Please enter a valid IPv6 address.");
+jQuery.validator.addClassRules("ipv6", { ipv6: true });
+
+
+jQuery.validator.addMethod("ipv4ipv6", function (value, element, param) {
+    return this.optional(element) || /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/i.test(value) || /^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$/i.test(value);
+}, "Please enter a valid IPv4 or IPv6 address.");
+jQuery.validator.addClassRules("ipv4ipv6", { ipv4ipv6: true });
+
+jQuery.validator.addMethod("mac", function (value, element, param) {
+    return this.optional(element) || /^([0-9a-fA-F]{2}[:]){5}([0-9a-fA-F]{2})$/.test(value);
+}, "Please enter a valid MAC address.");
+jQuery.validator.addClassRules("mac", { mac: true });
+
+
+jQuery.validator.addMethod("nopoints", function (value, element) {
+    return this.optional(element) || /^[^.]+$/i.test(value);
+}, "No points allowed");
+jQuery.validator.addClassRules("nopoints", { nopoints: true });
+
+jQuery.validator.addMethod("nosinglequotes", function (value, element) {
+    return this.optional(element) || /^[^']*$/i.test(value);
+}, "No single quotes allowed");
+jQuery.validator.addClassRules("nosinglequotes", { nosinglequotes: true });
+
+jQuery.validator.addMethod("currency", function (value, element) {
+    return (
+        this.optional(element) ||
+        /^-?(?!0+\.00)(?=.{1,9}(\.|$))(?!0(?!\.))\d{1,3}(\,\d{3})*(\.\d+)?$/.test(value) ||           // '.' before last x digits, all the others ',' between 3 numbers
+        /^-?(?!0+\,00)(?=.{1,9}(\,|$))(?!0(?!\,))\d{1,3}(\.\d{3})*(\,\d+)?$/.test(value) ||           // ',' before last x digits, all the others '.' between 3 numbers
+        /^-?(0|[1-9]\d*)((\.|\,)\d+)?$/.test(value)                                                   // maximum 1 of '.' or ',', no zero at start unless only number before separator
+    );
+}, " Only use numbers, commas and points.");
+jQuery.validator.addClassRules("currency", { currency: true });
+
+
+
+/*jQuery.validator.addMethod("windowslogin", function (value, element) {
+
+    var r = false;
+    if (value.indexOf("\\") < 1) r = true;
+
+    return this.optional(element) || !r;
+    //return this.optional(element) || /^\.\\\w+|\w+\\\w+$/i.test(value);
+}, "'domain\\username' OR '.\\username'");
+jQuery.validator.addClassRules("windowslogin", { windowslogin: true });*/
+
+
+jQuery.validator.addMethod("oswaittime", function (value, element) {
+    return this.optional(element) || /^[0-5]$/i.test(value);
+}, "Value must be between 0 and 5");
+jQuery.validator.addClassRules("oswaittime", { oswaittime: true });
+
+
+
+jQuery.validator.addMethod("netbios", function (value, element) {
+    var tester = value;
+    if (value.indexOf("\\") != -1) tester = value.split("\\")[0];
+    if(this.optional(element) || /^.{0,15}$/i.test(tester)) {
+        if(tester.indexOf('/') === -1 && tester.indexOf(':') === -1 && tester.indexOf('*') === -1 && tester.indexOf('?') === -1 && tester.indexOf('"') === -1 && tester.indexOf('|') === -1  && tester.indexOf('<') === -1  && tester.indexOf('>') === -1) return true;
+        else return false;
+    }
+    else return false; 
+}, 'Netbiosname cannot be longer than 15 characters and cannot contain the following characters: / * ? " | < > :');
+jQuery.validator.addClassRules("netbios", { netbios: true });
+
+jQuery.validator.addMethod("adsi", function (value, element) {
+    var t = value || "";
+    var ret = false;
+    if (t.toLowerCase().indexOf("dc=") == -1) ret = true;
+    return this.optional(element) || !ret;
+}, "Adsi path has to contain 'dc='");
+jQuery.validator.addClassRules("adsi", { adsi: true });
+
+
+jQuery.validator.addMethod("dns", function (value, element) {
+
+    var ret = false;
+    if (value.indexOf(".") == -1) ret = true;
+
+    return this.optional(element) || !ret;
+}, "DNS name has to contain '.'");
+jQuery.validator.addClassRules("dns", { dns: true });
+
+
+jQuery.validator.addMethod("endip", function (value, element) {
+    var ret = false;
+
+    var star = $(element).closest("form").find(".startip").val(); //in popup
+    if (star == undefined) star = $(element).closest("tr").find(".startip").html(); //in table
+    
+    var start = dot2num(star);
+    var end = dot2num(value);
+    if (start <= end) ret = true;
+
+    return this.optional(element) || ret;
+}, "End IP has to be bigger than Start IP");
+jQuery.validator.addClassRules("endip", { endip: true });
+
+
+jQuery.validator.addMethod("startip", function (value, element) {
+    var ret = false;
+
+
+    var star = $(element).closest("form").find(".endip").val(); //in popup
+    //START DO ONLY in table !!!
+    if (star == undefined) {
+        star = $(element).closest("tr").find(".endip").html(); //in table
+
+        var start = dot2num(value);
+        var end = dot2num(star);
+        if (start <= end) ret = true;
+    } else {
+        ret = true;
+    }
+
+    return this.optional(element) || ret;
+}, "Start IP has to be smaller than End IP");
+jQuery.validator.addClassRules("startip", { startip: true });
+
+
+
+
+
+
+
+jQuery.validator.addMethod("uniquewindows", function (value, element) {
+
+    var r = false;
+    if (value.indexOf("\\") == -1) r = true;
+    if (!element.classList.contains('netbios')) {
+
+        if (value.indexOf(".") == 0) r = true;
+    }
+
+    return this.optional(element) || !r;
+    //return this.optional(element) || /^\.\\\w+|\w+\\\w+$/i.test(value);
+}, "'domain\\computername' OR 'WORKGROUP\\computername'");
+jQuery.validator.addClassRules("uniquewindows", { uniquewindows: true });
+
+
+
+
+
+//(([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)(\s*;\s*|\s*$))*
+
+jQuery.validator.addMethod("emailgroup", function (value, element, param) {
+    return this.optional(element) || /^((([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,15}|[0-9]{1,15})(\]?)(\s*;\s*|\s*$)))*$/i.test(value);
+}, "Please enter a valid email address group.");
+jQuery.validator.addClassRules("emailgroup", { emailgroup: true });
+
+jQuery.validator.addMethod("webrol", function (value, element) {
+
+    return true;
+
+    var or = false;
+    var mem = value.split(",");
+    for (var i = 0; i < mem.length; i++) {
+        var tester = mem[i];
+        if (mem[i].indexOf("\\") != -1) tester = mem[i].split("\\")[0];
+
+        or = /^.{0,15}$/i.test(tester) || or;
+    }
+
+
+
+
+    return this.optional(element) || or;
+}, "Invalid group name");
+jQuery.validator.addClassRules("webrol", { webrol: true });
+
+
+
+function dot2num(dot) {
+    var d = dot.split('.');
+    return ((((((+d[0]) * 256) + (+d[1])) * 256) + (+d[2])) * 256) + (+d[3]);
+}
+
+jQuery.validator.addMethod("snmpoid", function (value, element, param) {
+    return this.optional(element) || /^([1-9][0-9]{0,}|0)(\.([1-9][0-9]{0,}|0)){5,500}$/.test(value);
+}, "Please enter a valid OID.");
+jQuery.validator.addClassRules("snmpoid", { snmpoid: true });
+
+jQuery.validator.addMethod("json", function (value, element, param) {
+    if (value === '*****') return true;
+    try {
+        JSON.parse(value);
+    }
+    catch (ex) {
+        return false;
+    }
+    return true;
+}, "Please enter a valid JSON string.");
+jQuery.validator.addClassRules("json", { json: true });
+
+jQuery.validator.addMethod("assetexclusionreason", function (value, element, param) {
+    return this.optional(element) || /([1-9]\d*$)|-1/.test(value);
+}, "Please select a valid exclusion reason.");
+jQuery.validator.addClassRules("assetexclusionreason", { assetexclusionreason: true });
+
+jQuery.validator.addMethod("maxlength255", function (value, element, param) {
+    return this.optional(element) || /^\s*([^\s]\s*){0,255}$/.test(value);
+}, "Your input contains too many characters. Only 255 characters are allowed.");
+jQuery.validator.addClassRules("maxlength255", { maxlength255: true });
